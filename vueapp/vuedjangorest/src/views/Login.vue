@@ -106,7 +106,6 @@ export default {
 
           this.$router.push({name: 'home'})
         })
-        /* eslint-disable */
         .catch((error) => {
           // console.log('Login.vue, caught error: ' + error)
           this.$store.commit(mutationTypes.loginFailure, error.response.data)
