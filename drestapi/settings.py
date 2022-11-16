@@ -38,7 +38,7 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     # Устанавливаем срок жизни токена
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=20),
     'AUTH_HEADER_TYPES': ('JWT',),
 }
 
@@ -100,7 +100,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'Livedata',
         'USER': 'postgres',
-        'PASSWORD': 'Hahalala90!',
+        'PASSWORD': 'A7130cec0b!',
         'HOST': 'localhost',
         'PORT': '5432',
     }
