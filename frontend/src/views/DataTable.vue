@@ -1,4 +1,7 @@
 <template>
+   <div class="grid-item1">
+        <Navbar2></Navbar2>
+      </div>
   <div id="datatable">
     <div class="container">
       <div class="row">
@@ -80,6 +83,7 @@
 
 <script>
 import {getAPI} from '@/api/axios'
+import Navbar2 from '@/components/Navbar2.vue'
 export default {
   name: 'DataTable',
   data() {
@@ -92,9 +96,9 @@ export default {
       // APIData: [],
     }
   },
-  // components: {
-  //   Navbar,
-  // },
+  components: {
+    Navbar2,
+  },
   mounted() {
     this.getAll()
   },
@@ -122,6 +126,12 @@ export default {
             surname: this.surname,
             date: this.date,
           })
+          // .post('datatable/', {
+          //   id: this.id,
+          //   name: this.name,
+          //   surname: this.surname,
+          //   date: this.date,
+          // })
           .then(() => {
             console.log('Im just creating new data')
             this.getAll()
@@ -147,7 +157,9 @@ export default {
     },
     deleteOne(id) {
       if (confirm('Delete data with id ' + id + ' ?')) {
-        getAPI.delete('datatable/' + id + '/').then(() => {
+        getAPI.delete('datatable/' + id + '/', {
+          headers: {Authorization: 'JWT ' + localStorage.access},
+        }).then(() => {
           console.log('data deleted'), this.getAll()
         })
       }

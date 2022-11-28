@@ -1,8 +1,10 @@
 <template>
   <Navbar></Navbar>
   <div class="home">
-    <h1>Home page</h1>
-    <span :src="user_data">Logged in user: {{ user_data }}</span>
+    <h2>Home page</h2>
+    <h4>
+      <span :src="user_data">Logged in user: {{ user_data }}</span>
+    </h4>
   </div>
 </template>
 
@@ -40,3 +42,13 @@ export default {
   },
 }
 </script>
+
+<style>
+.home {
+  font-size: 72px;
+  background: linear-gradient(to right, #30CFD0 0%, #330867 30%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+</style>

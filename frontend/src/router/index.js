@@ -1,6 +1,7 @@
 import {createRouter, createWebHashHistory} from 'vue-router'
 import DataTable from '@/views/DataTable'
-import DataSemantic from '@/views/DataSemantic'
+import DataTableElement from '@/views/DataTableElement'
+import ETable from '@/views/ETable'
 import HomeView from '@/views/HomeView'
 // import Register from '@/views/Register'
 import Login from '@/views/Login'
@@ -23,9 +24,14 @@ const routes = [
     component: DataTable,
   },
   {
-    path: '/datasemantic',
-    name: 'datasemantic',
-    component: DataSemantic,
+    path: '/datatableelement',
+    name: 'datatableelement',
+    component: DataTableElement,
+  },
+  {
+    path: '/etable',
+    name: 'etable',
+    component: ETable,
   },
   {
     path: '/login',

@@ -1,17 +1,19 @@
 <template>
-  <Navbar></Navbar>
-  <div id="app">
-    <router-view />
-  </div>
+  <!-- <div class="grid-container"> -->
+    <!-- <Navbar></Navbar> -->
+    <div id="app">
+      <router-view />
+    </div>
+  <!-- </div> -->
 </template>
 
 <script>
 import axios from 'axios'
-import Navbar from '@/components/Navbar.vue'
+// import Navbar from '@/components/Navbar.vue'
 export default {
   name: 'App',
   components: {
-    Navbar,
+    // Navbar,
   },
   beforeCreate() {
     this.$store.commit('initializeStore')
@@ -23,10 +25,10 @@ export default {
     }
   },
   mounted() {
-    setInterval(() => {
-      console.log('mounted: ' + this.$store.state.auth.access)
-      this.getAccess()
-    }, 600000)
+    // setInterval(() => {
+    //   console.log('mounted: ' + this.$store.state.auth.access)
+    //   this.getAccess()
+    // }, 600000)
   },
   methods: {
     getAccess() {
@@ -52,9 +54,14 @@ export default {
 
 <style>
 body {
-  margin: 0;
-  padding: 0;
+  /* margin: 0;
+  padding: 0; */
   background-image: url('https://www.toptal.com/designers/subtlepatterns/uploads/stripes-light.png');
   background-size: 150px 150px;
+}
+
+.grid-container {
+  display: grid;
+  height: 100hv;
 }
 </style>

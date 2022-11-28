@@ -1,4 +1,5 @@
 <template>
+  
   <header class="header">
     <img class="logo" src="@/assets/logo-no-background.png" alt="logo" />
     <nav>
@@ -7,7 +8,9 @@
         <li>
           <router-link :to="{name: 'datatable'}" exact>Datatable</router-link>
         </li>
-        <li>FAQ</li>
+        <li>
+          <router-link :to="{name: 'datatablequasar'}" exact>DatatableQuasar</router-link>
+        </li>
         <li>
           <router-link :to="{name: 'login'}" exact
             ><button class="header_button">Login</button></router-link
