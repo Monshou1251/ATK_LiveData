@@ -2,7 +2,9 @@ import {createRouter, createWebHashHistory} from 'vue-router'
 import DataTable from '@/views/DataTable'
 import DataTableElement from '@/views/DataTableElement'
 import ETable from '@/views/ETable'
-import HomeView from '@/views/HomeView'
+// import HomeView from '@/views/HomeView'
+import GlobalData from '@/views/GlobalData'
+
 // import Register from '@/views/Register'
 import Login from '@/views/Login'
 import Logout from '@/views/Logout'
@@ -10,8 +12,8 @@ import Logout from '@/views/Logout'
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView,
+    name: 'globalData',
+    component: GlobalData,
   },
   // {
   //   path: '/register',
