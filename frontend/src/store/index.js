@@ -7,6 +7,7 @@ import localdata from '@/store/modules/localdata'
 // Vue.use(Vuex)
 
 export default createStore({
+  // namespaced: true,
   state: {},
   getters: {},
   mutations: {},

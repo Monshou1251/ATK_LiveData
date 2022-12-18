@@ -1,6 +1,7 @@
 import {createRouter, createWebHashHistory} from 'vue-router'
 import DataTable from '@/views/DataTable'
 import DataTableElement from '@/views/DataTableElement'
+import Selection from '@/views/Selection'
 import ETable from '@/views/ETable'
 // import HomeView from '@/views/HomeView'
 import GlobalData from '@/views/GlobalData'
@@ -24,6 +25,11 @@ const routes = [
     path: '/datatable',
     name: 'datatable',
     component: DataTable,
+  },
+  {
+    path: '/selection',
+    name: 'selection',
+    component: Selection,
   },
   {
     path: '/datatableelement',
