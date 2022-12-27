@@ -10,24 +10,33 @@
         <SearchField></SearchField>
       </div>
       <div class="grid-item4">
-        Item-4
+        <!-- Item-4 -->
         <!-- <step-backward-filled />
         <sliders-filled /> -->
       </div>
       <div class="grid-item5">
-        <local-data :api-url="apiUrl"></local-data>
+        <Suspense>
+          <template #default>
+            <local-data :api-url= apiUrl></local-data>
+          </template>
+          <template #fallback>
+            <div>Loading...</div>
+          </template>
+        </Suspense>
+        
       </div>
       <div class="grid-item6">
-        Item-6
+        <!-- Item-6 -->
       </div>
       <div class="grid-item7">
-        Item-7
+        <!-- Item-7 -->
       </div>
     <!-- </div> -->
   </div>
 </template>
 <script>
 
+/* eslint-disable */
 import Navbar2 from '@/components/Navbar2.vue'
 import LocalData from '@/components/LocalData'
 import Sidebar from '@/components/Sidebar.vue'
@@ -42,10 +51,21 @@ export default {
   },
   data() {
     return {
-      apiUrl: 'datatable/'
+      apiUrl: this.$store.state.localdata.apiUrl
     }
-  }
+  },
+  computed: {
+    // apiUrl() {return this.$store.state.localdata.apiUrl}
+  },
+  mounted() {
+    // this.$store.dispatch('getData', this.apiUrl)
+    // this.$store.commit('changeApiUrl', this.apiUrl)
+  },
+  // watch() {
+  //   this.$store.state.localdata.apiUrl
+  // }
 }
+/* eslint-enable */
 </script>
 <style lang="less">
 .editable-cell {
@@ -156,6 +176,8 @@ export default {
 .grid-item7 {
   grid-column: 1/4;
   grid-row: 4/5;
+  background-color: white;
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.185);
   // background-color: rgba(142, 165, 42, 0.336);
 }
 

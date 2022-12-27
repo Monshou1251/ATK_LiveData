@@ -1,9 +1,10 @@
 <template>
+    
     <a-popover placement="top">
       <template #content>
         <p>Add new data</p>
       </template>
-      <a-button class="editable-add-btn" style="margin-bottom: 4px" @click="handleAdd"><PlusOutlined style="display: flex"/></a-button>
+      <a-button :disabled=!disableDataAdd class="editable-add-btn" style="margin-bottom: 4px" @click="handleAdd"><PlusOutlined style="display: flex"/></a-button>
     </a-popover>
     <!-- <a-popover placement="top">
       <template #content>
@@ -15,7 +16,10 @@
       <template #content>
         <p>Delete data</p>
       </template>
-      <a-button class="editable-add-btn" style="margin-bottom: 4px" @click="onDelete"><DeleteOutlined style="display: flex"/></a-button>
+      <!-- <template> -->
+        <a-button :disabled=!disableDeleteButton class="editable-add-btn" style="margin-bottom: 4px"  @click="onDelete"><DeleteOutlined style="display: flex"/></a-button>
+      <!-- </template> -->
+      <!-- <a-button class="editable-add-btn" style="margin-bottom: 4px"  @click="onDelete"><DeleteOutlined style="display: flex"/></a-button> -->
     </a-popover>
     <a-popover placement="top">
       <template #content>
@@ -30,35 +34,96 @@
         <a-table
           size=small
           bordered
-          rowKey="id"
+          rowKey = 'index'
           :row-selection="rowSelection"
           :data-source="getAll"
           :columns="columns"
           :pagination="{ pageSize: 15 }">
           
-          <template #bodyCell="{ column, text, record, }">
-            <template v-if="column.dataIndex === 'index'">
-                {{ getAll.findIndex(i => i == (getAll.find(i => i.id === record.id))) + 1 }}
-            </template>
+          <template #bodyCell="{ column, text, record }">
+            <!-- <template v-if="column.dataIndex === 'index'">
+                {{ getAll.findIndex(i => i == (getAll.find(i => i.conn_type === record.conn_type))) + 1 }}
+            </template> -->
 
-            <template v-if="column.dataIndex === 'id' ">
+            <template v-if="column.dataIndex == 'target_field_name'">
               <div class="editable-cell">
-                <div v-if="editableData[record.id]" class="editable-cell-input-wrapper">
-                  <a-input v-model:value="editableData[record.id].id" @pressEnter="save(record.id)" />
-                  <check-outlined class="editable-cell-icon-check" @click="save(record.id)" />
+                <div v-if="editableData[record.index]" class="editable-cell-input-wrapper">
+                  <a-input v-model:value="editableData[record.index].target_field_name" @pressEnter="save(record.index)" />
+                  <check-outlined class="editable-cell-icon-check" @click="save(record.index)" />
                 </div>
                 <div v-else class="editable-cell-text-wrapper">
-                  {{ text || ' ' }}
-                  <edit-outlined class="editable-cell-icon" @click="edit(record.id)" />
+                  {{ text }}
+                  <edit-outlined class="editable-cell-icon" @click="edit(record.index)" />
                 </div>
               </div>
             </template>
-
-            <template v-if="column.dataIndex === 'name'">
+            <template v-if="column.dataIndex == 'conn_type'">
               <div class="editable-cell">
-                <div v-if="editableData[record.id]" class="editable-cell-input-wrapper">
-                  <a-input v-model:value="editableData[record.id].name" @pressEnter="save(record.id)" />
-                  <check-outlined class="editable-cell-icon-check" @click="save(record.id)" />
+                <div v-if="editableData[record.index]" class="editable-cell-input-wrapper">
+                  <a-input v-model:value="editableData[record.index].conn_type" @pressEnter="save(record.index)" />
+                  <check-outlined class="editable-cell-icon-check" @click="save(record.index)" />
+                </div>
+                <div v-else class="editable-cell-text-wrapper">
+                  {{ text }}
+                  <edit-outlined class="editable-cell-icon" @click="edit(record.index)" />
+                </div>
+              </div>
+            </template>
+            <template v-if="column.dataIndex == 'last_read_seq'">
+              <div class="editable-cell">
+                <div v-if="editableData[record.index]" class="editable-cell-input-wrapper">
+                  <a-input v-model:value="editableData[record.index].last_read_seq" @pressEnter="save(record.index)" />
+                  <check-outlined class="editable-cell-icon-check" @click="save(record.index)" />
+                </div>
+                <div v-else class="editable-cell-text-wrapper">
+                  {{ text }}
+                  <edit-outlined class="editable-cell-icon" @click="edit(record.index)" />
+                </div>
+              </div>
+            </template>
+            <template v-if="column.dataIndex == 'conn_name'">
+              <div class="editable-cell">
+                <div v-if="editableData[record.index]" class="editable-cell-input-wrapper">
+                  <a-input v-model:value="editableData[record.index].conn_name" @pressEnter="save(record.index)" />
+                  <check-outlined class="editable-cell-icon-check" @click="save(record.index)" />
+                </div>
+                <div v-else class="editable-cell-text-wrapper">
+                  {{ text }}
+                  <edit-outlined class="editable-cell-icon" @click="edit(record.index)" />
+                </div>
+              </div>
+            </template>
+            <template v-if="column.dataIndex  == 'required'">
+              <div class="editable-cell">
+                <div v-if="editableData[record.index]" class="editable-cell-input-wrapper">
+                  <a-input v-model:value="editableData[record.index].required" @pressEnter="save(record.index)" />
+                  <check-outlined class="editable-cell-icon-check" @click="save(record.index)" />
+                </div>
+                <div v-else class="editable-cell-text-wrapper">
+                  {{ text || ' ' }}
+                  <edit-outlined class="editable-cell-icon" @click="edit(record.index)" />
+                </div>
+              </div>
+            </template>
+            <!-- {{ columns }} -->
+            <!-- <template v-if="columns.includes('conn_type')">
+              <div class="editable-cell">
+                <div v-if="editableData[record.index]" class="editable-cell-input-wrapper">
+                  <a-input v-model:value="editableData[record.index].required" @pressEnter="save(record.index)" />
+                  <check-outlined class="editable-cell-icon-check" @click="save(record.index)" />
+                </div>
+                <div v-else class="editable-cell-text-wrapper">
+                  {{ text || ' ' }}
+                  <edit-outlined class="editable-cell-icon" @click="edit(record.index)" />
+                </div>
+              </div>
+            </template> -->
+
+            <!-- <template v-if="column.dataIndex === 'name'">
+              <div class="editable-cell">
+                <div v-if="editableData[record.index]" class="editable-cell-input-wrapper">
+                  <a-input v-model:value="editableData[record.id].index" @pressEnter="save(record.index)" />
+                  <check-outlined class="editable-cell-icon-check" @click="save(record.index)" />
                 </div>
                 <div v-else class="editable-cell-text-wrapper">
                   {{ text || ' ' }}
@@ -78,8 +143,7 @@
                   <edit-outlined class="editable-cell-icon" @click="edit(record.id)" />
                 </div>
               </div>
-            </template>
-
+            </template> -->
             <!-- <template v-if="column.dataIndex === 'date'">
               <div class="editable-cell">
                 <div v-if="editableData[record.id]" class="editable-cell-input-wrapper">
@@ -109,24 +173,28 @@
 
 <script>
 /* eslint-disable */
-import {  defineComponent, onMounted, reactive, ref, toRefs, onBeforeUpdate, computed} from 'vue';
+import {  defineComponent, onMounted, reactive, watchEffect, ref, unref, toRefs,onUpdated, watch, onRenderTriggered, onBeforeUnmount, onBeforeMount, onBeforeUpdate, computed} from 'vue';
 import { CheckOutlined, EditOutlined, PlusOutlined, CopyOutlined, DeleteOutlined } from '@ant-design/icons-vue';
 import { cloneDeep } from 'lodash-es';
-import {getAPI} from '@/api/axios'
+import { getAPI } from '@/api/axios'
 import { useStore } from 'vuex'
-// import { Table } from 'ant-design-vue';
-// import { watch } from 'fs';
 /* eslint-enable */
-export default defineComponent({
-  name: 'LocalData',
+
+
+export default ({
+  name: 'CdcConn',
   props: {
     apiUrl: {
         type: String,
         required: true
     }
   },
-  methods: {
-  },
+  // methods:{
+  // 	filter(nationality){
+  //   // We can't find 'Taiwan' in nationalityArr
+  //  return this.nationalityArr.filter(n=>n===nationality).length===0?false:true; // false
+  //  }
+  // },
   components: {
     CheckOutlined,
     PlusOutlined,
@@ -134,126 +202,102 @@ export default defineComponent({
     DeleteOutlined,
     // CopyOutlined,
   },
-  setup(props) {
+  async setup(props) {
+    // console.log('apiUrl is equal to: ' + props.apiUrl)
     const store = useStore()
-   
+    const disableDeleteButton = computed(() => store.state.localdata.deleteDataAllowed)
+    const disableDataAdd = computed(() => store.state.localdata.addDataAllowed)
+    // const disableButton = true
+    // const disableButton = store.commit('disableDelete')
+    store.commit('changeApiUrl', props.apiUrl)
+    console.log(store.state.localdata.apiUrl)
+    let columns = reactive([])
+    let getAll = reactive([])
+    watch(() => store.state.localdata.apiUrl, (newUrl, oldUrl) => {
+      // console.log('newUrl', newUrl)
+      console.log('oldUrl', oldUrl)
+      store.dispatch('getData', newUrl)
+      .then(() => {store.commit('changeApiUrl', newUrl)
+      })
+      .then(() => {
+        getAll = computed(() => store.state.localdata.data)
+        console.log(getAll)
+        // let getAllString = JSON.parse(JSON.stringify(getAll.value))
+        let getAllString = getAll.value
+        let arr = getAllString.map((item, index) => ({index: ++index, ...item}))
 
-    // const getAll = ref([])
-    // store.dispatch('getData', {apiUrl: props.apiUrl})
-    // e shallowRef() instead.
-    const getAll = reactive(computed(() => store.state.localdata.data))
+        getAll = arr
+        store.commit('getDataSuccess', getAll)
+        const firstGetAllElement = getAll[0]
+        let getKeys = Object.keys(firstGetAllElement)
+        // columns.splice(0, (columns.length))
+        columns.length = 0
+        for (const i of getKeys) {
+          const ff = {
+            title: i,
+            dataIndex: i,
+            key: i,
+          }
+          columns.push(ff)
+        
+        }
+        console.log('this comes COLUMNS from watch:')
+        console.log(columns)
+        const blop = {"width" : "1%"}
+        // Object.assign(insertData.find(item => item.id == key), editableData[key]);
+        Object.assign(columns.find(i => i.title === "index"), blop);
+        console.log(columns)
+      })
+    })
+
+    await store.dispatch('getData', props.apiUrl)
+    .then(() => {store.commit('changeApiUrl', props.apiUrl)})
+    .then(() => {
+      getAll = computed(() => store.state.localdata.data)
+    })
+    let kek = reactive(getAll.value.map((item, index) => ({index: ++index, ...item})))
+      let firstGetAllElement = kek[0]
+      let getKeys = Object.keys(firstGetAllElement)
+      for (const i of getKeys) {
+        const ff = {
+          title: i,
+          dataIndex: i,
+          key: i,
+        }
+        columns.push(ff)
+        const blop = {"width" : "1%"}
+        // Object.assign(insertData.find(item => item.id == key), editableData[key]);
+        Object.assign(columns.find(i => i.title === "index"), blop);
+      }
     
-    // const dataConverted = (getAll) => {
-    //   return _.cloneDeep(getAll);
-    // }
-    // const plainObject = { ...getAll };
-    // console.log(plainObject)
-
-    const columns = [
-    {
-      title: '#',
-      dataIndex: 'index',
-      key: 'index',
-      width: '2%',
-      align: 'center',
-    }, 
-    {
-      title: 'id',
-      dataIndex: 'id',
-      key: 'id',
-      width: '8%',
-      align: 'center',
-    }, {
-      title: 'name',
-      dataIndex: 'name',
-      key: 'name',
-      width: '31%',
-    },
-    {
-      title: 'surname',
-      dataIndex: 'surname',
-      key: 'surname',
-      width: '31%',
-    }, {
-      title: 'date',
-      dataIndex: 'date',
-      key: 'date',
-    },
-  ];
-    
-    
-    // const kek = ['afaf', 'ffff', 1]
-    // console.log(kek.findIndex(i => i == 'afaf'))
-   
-    // const kek = [{id: 1, name: 'Boba'}, {id: 2, name: 'Boba2'}, {id: 22, name: 'Boba3'}]
-    // const findKek = kek.find(i => i.name === 'Boba2')
-    // const IndexKek = kek.findIndex(i => i == (findKek))
-    // console.log(findKek)
-    // console.log(IndexKek)
-
-
-    
-
     const editableData = reactive({});
-
     const dataSource2 = ref([])
-
-    
-
-    // const getData = computed(() => sto)
-
-    // const products = computed(() => store.state.products.all)
-    // const addProductToCart = (product) => store.dispatch('cart/addProductToCart', product)
-    // store.dispatch('products/getAllProducts')
-
-    // const getAll = async () => {
-    //   store.commit('getDataStart')
-    //   // store.commit('getDataSuccess')
-    //   console.log(props)
-    //   // store.dispatch('getData')
-    //   await getAPI
-    //     .get(props.apiUrl)
-    //     .then((response) => {
-
-    //       // console.log(response.data)
-    //       dataSource2.value = response.data
-    //       this.state.commit('setData', response.data)
-    //       console.log(store.data)
-    //       console.log(dataSource2)
-    //     })
-    // }
-    
     let selectedObject = []
 
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
         console.log(selectedRowKeys)
-        selectedObject = store.state.localdata.data.filter(d => selectedRowKeys.find(key => key === d.id))
+        // const selectedObject2 = getAll.value
+        selectedObject = getAll.filter(d => selectedRowKeys.find(key => key === d.index))
         console.log(selectedObject)
       }
     };
 
-    
-
-
-    const edit = key => {
+    const edit = index => {
       store.commit('editDataStart')
-      editableData[key] = cloneDeep(store.state.localdata.data.find(item => item.id == key))
+      console.log(index)
+      editableData[index] = cloneDeep(getAll.filter(item => index === item.index)[0])
+      console.log(editableData)
+      // editableData[index] = cloneDeep(getAll.find(item => item.index === index))
     };
 
     const save = (key) => {
-      const dataToReplace = store.state.localdata.data.find(item => item.id == key)
+      const dataToReplace = getAll.find(item => item.index == key)
       console.log(dataToReplace)
       Object.assign(dataToReplace, editableData[key]);
       console.log(editableData[key])
-      // getAPI.put('datatable/' + key + '/', dataToReplace)
-      //   .then(() => {
-      //     store.commit('editDataSuccess')
-      //   })
       store.commit('updateData', editableData[key])
-      // console.log(dataToReplace)
-      // console.log(getAll.value)
       delete editableData[key];
     };
 
@@ -264,37 +308,19 @@ export default defineComponent({
         surname: '',
         // date: '',
       }
-
-      // getAll.value.push(newData)
-      // {{ getAll.findIndex(i => i == (getAll.find(i => i.id === record.id))) + 1 }}
       store.commit('addData', newData)
-      // const index = store.state.localdata.data.findIndex(i => i == (store.state.localdata.data.find(i => i.name === newData.name))) + 1
-      // console.log(index)
       edit(newData.id)
       console.log(newData)
       console.log(getAll)
-      
-      // console.log("111 " + getAll.value)
-      
-      // getAPI
-      //     .post('datatable/', 
-      //       newData
-      //     )
-      //     .then(() => {
-      //       console.log('New data created')
-      //       // getAll()
-      //     })
     }
 
 
     const onDelete = () => {
+      console.log(store.state.localdata.data)
       const dataToDelete = store.state.localdata.dataToDelete
       console.log(selectedObject)
       store.commit('deleteData', selectedObject)
-      console.log(store.state.localdata.data)
-      console.log('_____________')
       console.log(dataToDelete)
-      console.log('_____________')
     }
 
     const onSubmit = () => {
@@ -303,7 +329,7 @@ export default defineComponent({
         const dataToDeleteId = store.state.localdata.dataToDelete.map(i => i.id)
         console.log(dataToDeleteId)
         for (const i of dataToDeleteId) {
-          getAPI.delete('datatable/' + i + '/')
+          getAPI.delete(props.apiUrl + i + '/')
           .then(() => {
             console.log('data deleted, id: ' + i)
         })}
@@ -316,9 +342,8 @@ export default defineComponent({
         const dataToAdd = store.state.localdata.addedData
         console.log(dataToAdd)
         for (const y in dataToAdd) {
-
           console.log(dataToAdd[y])
-          getAPI.post('datatable/', dataToAdd[y])
+          getAPI.post('CdcConn/', dataToAdd[y])
           .then(() => {
             console.log('data added' + y)
           })
@@ -331,7 +356,7 @@ export default defineComponent({
         console.log('updatedData is not empty!')
         for (const z of updatedData) {
         console.log(z.id)
-        getAPI.put('datatable/' + z.id + '/', z)
+        getAPI.put('CdcConn/' + z.id + '/', z)
         .then(() => {
           console.log('data added' + z.id)
         })
@@ -341,17 +366,20 @@ export default defineComponent({
       }
     }
 
-  onMounted(() => {
-    store.dispatch('getData', {apiUrl: props.apiUrl})
-    store.state.localdata.data
-
-    // console.log(store.state.localdata.data)
-    // console.log(getAll.data)
-    console.log('Im mounted')
-    })
-
+    // onMounted(() => {
+      // store.dispatch('getData', props.apiUrl).then(() => {
+      //   console.log('data received: ', store.state.localdata.data)
+      //   getAll = store.state.localdata.data
+      // })
+      // store.state.localdata.data
+      // getAll
+      // console.log('that getAll comes from onMounted' + getAll)
+      // console.log('Im mounted')
+      // console.log(props.apiUrl + ' this comes from onMounted LocalData')
+      // })
     
     return {
+      // getData: () => store.dispatch('getData', props.apiUrl),
       rowSelection,
       columns,
       onDelete,
@@ -362,6 +390,8 @@ export default defineComponent({
       edit,
       save,
       onSubmit,
+      disableDeleteButton,
+      disableDataAdd
     };
   },
 });
