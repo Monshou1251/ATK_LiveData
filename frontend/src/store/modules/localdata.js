@@ -73,7 +73,7 @@ const mutations = {
         state.isLoading = false
     },
     deleteData (state, payload) {
-        const result = state.data.filter(x => !payload.some(y => x.id === y.id))
+        const result = state.data.filter(x => !payload.some(y => x.index === y.index))
         state.data = result
         // const selectedId = payload.map(i => i.id)
         state.dataToDelete = payload
@@ -90,6 +90,9 @@ const mutations = {
         console.log(payload)
         state.updatedData.push(payload)
         console.log(state.updatedData)
+    },
+    cleanUpdatedData (state) {
+        state.updatedData.length  = 0
     },
     changeApiUrl (state, Url) {
         state.apiUrl = Url

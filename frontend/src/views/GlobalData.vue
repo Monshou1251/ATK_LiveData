@@ -41,29 +41,38 @@ import Navbar2 from '@/components/Navbar2.vue'
 import LocalData from '@/components/LocalData'
 import Sidebar from '@/components/Sidebar.vue'
 import SearchField from '@/components/SearchField.vue'
+import { ref, computed, watchEffect } from 'vue'
+import { useStore } from 'vuex'
+// import store from '@/store'
 export default {
-  name: 'GlobalData',
   components: {
     Sidebar,
     SearchField,
     Navbar2,
     LocalData,
   },
-  data() {
-    return {
-      apiUrl: this.$store.state.localdata.apiUrl
-    }
-  },
-  computed: {
-    // apiUrl() {return this.$store.state.localdata.apiUrl}
-  },
-  mounted() {
-    // this.$store.dispatch('getData', this.apiUrl)
-    // this.$store.commit('changeApiUrl', this.apiUrl)
-  },
+  setup () {
+    const store = useStore()
+    console.log(store.state.localdata.apiUrl)
+    const apiUrl = computed(() => store.state.localdata.apiUrl)
+    console.log('apiUrl comes from GlobalData ' + apiUrl.value)
+  // computed: {
+  //   // apiUrl() {return this.$store.state.localdata.apiUrl}
+  // },
+  // mounted() {
+  //   // this.$store.dispatch('getData', this.apiUrl)
+  //   // this.$store.commit('changeApiUrl', this.apiUrl)
+  // },
   // watch() {
   //   this.$store.state.localdata.apiUrl
   // }
+
+    return {
+      apiUrl,
+      // apiUrl: computed(() => store.state.localdata.apiUrl)
+    }
+  }
+  
 }
 /* eslint-enable */
 </script>

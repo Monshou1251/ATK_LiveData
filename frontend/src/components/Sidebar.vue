@@ -109,29 +109,29 @@ export default defineComponent({
       store.commit('changeApiUrl', 'CdcConn/')
       store.commit('enableDataDelete')
       store.commit('disableDataAdd')
-      store.dispatch('getData', store.state.localdata.apiUrl)
+      // store.dispatch('getData', store.state.localdata.apiUrl)
       // console.log(store.state.localdata.data)
     }
     
     const sendApiUrl2 = () => {
       store.commit('changeApiUrl', 'CdcFields/')
-      store.dispatch('getData', store.state.localdata.apiUrl).then(() => {
-        // console.log(store.state.localdata.data)
-      })
+      // store.dispatch('getData', store.state.localdata.apiUrl).then(() => {
+      //   // console.log(store.state.localdata.data)
+      // })
       store.commit('disableDataDelete')
       store.commit('disableDataAdd')
     }
     const sendApiUrl3 = () => {
       store.commit('changeApiUrl', 'CdcStatus/')
-      store.dispatch('getData', store.state.localdata.apiUrl)
+      // store.dispatch('getData', store.state.localdata.apiUrl)
       store.commit('disableDataDelete')
       store.commit('disableDataAdd')
       // console.log(store.state.localdata.apiUrl)
     }
     const sendApiUrl4 = () => {
       store.commit('changeApiUrl', 'CdcTables/')
-      store.dispatch('getData', store.state.localdata.apiUrl)
-      store.commit('disableDataDelete')
+      // store.dispatch('getData', store.state.localdata.apiUrl)
+      store.commit('enableDataDelete')
       store.commit('enableDataAdd')
       // console.log(store.state.localdata.apiUrl)
     }
