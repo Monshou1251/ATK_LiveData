@@ -1,9 +1,13 @@
 .DS_Store
-node_modules
+frontend/node_modules
 /dist
-vueapp/vuedjangorest/node_modules
 venv
 app/migrations
+frontend/views/DataTable.vue
+frontend/views/DataTableElement.vue
+frontend/views/ETable.vue
+frontend/views/test.vue
+frontend/views/test.vue
 
 # local env files
 .env.local
