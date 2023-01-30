@@ -102,6 +102,21 @@ export default ({
     const apiUrlTest = computed(() => store.state.localdata.apiUrl)
     let columnDefs = ref()
     let rowSelection = 'multiple'
+    const cdcFieldsNonEditable = [
+      'table_id',
+      'source_field_name',
+      // 'target_field_name',
+      'field_index',
+      'field_type',
+      'modified_time',
+      'pk_field',
+      // 'required'
+    ]
+    const statusNonEditable = [
+      'table_id',
+      // 'last_read_seq',
+      'init_read_seq',
+    ]
    
     
     
@@ -145,6 +160,18 @@ export default ({
                 cellStyle: {'background-color': 'rgba(128, 128, 128, 0.060)',
                   'box-shadow': '1px 0px 0px rgba(128, 128, 128, 0.216)'
                 },
+              }
+              columnDefs.value.push(ff)
+            } else if (props.apiUrl == 'CdcFields/' && cdcFieldsNonEditable.includes(i)) {
+              let ff = {
+                field: i,
+                type: 'nonEditable',
+              }
+              columnDefs.value.push(ff)
+            } else if (props.apiUrl == 'CdcStatus/' && statusNonEditable.includes(i)) {
+              let ff = {
+                field: i,
+                type: 'nonEditable',
               }
               columnDefs.value.push(ff)
             } else {
