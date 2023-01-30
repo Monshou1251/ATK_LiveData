@@ -9,16 +9,20 @@ from django.db import models
 
 
 class CdcConn(models.Model):
+    id = models.BigAutoField(primary_key=True)
     conn_type = models.CharField(max_length=128, blank=True, null=True)
-    conn_name = models.CharField(primary_key=True, max_length=128)
+    conn_name = models.CharField(max_length=128)
 
     class Meta:
-        managed = False
+        managed = True
+        ordering = ['-id']
         db_table = 'cdc_conn'
+        unique_together = (('id', 'conn_name'),)
 
 
 class CdcFields(models.Model):
-    table_id = models.CharField(primary_key=True, max_length=128)
+    id = models.BigAutoField(primary_key=True)
+    table_id = models.CharField(max_length=128)
     source_field_name = models.CharField(max_length=128)
     target_field_name = models.CharField(max_length=128, blank=True, null=True)
     field_index = models.DecimalField(
@@ -31,23 +35,28 @@ class CdcFields(models.Model):
         max_digits=10, decimal_places=0, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
+        ordering = ['-id']
         db_table = 'cdc_fields'
-        unique_together = (('table_id', 'source_field_name'),)
+        unique_together = (('id', 'table_id', 'source_field_name'),)
 
 
 class CdcStatus(models.Model):
-    table_id = models.CharField(primary_key=True, max_length=128)
+    id = models.BigAutoField(primary_key=True)
+    table_id = models.CharField(max_length=128)
     last_read_seq = models.CharField(max_length=35, blank=True, null=True)
     init_read_seq = models.CharField(max_length=35, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
+        ordering = ['-id']
         db_table = 'cdc_status'
+        unique_together = (('id', 'table_id'),)
 
 
 class CdcTables(models.Model):
-    table_id = models.CharField(primary_key=True, max_length=128)
+    id = models.BigAutoField(primary_key=True)
+    table_id = models.CharField(max_length=128)
     source_db = models.CharField(max_length=128, blank=True, null=True)
     source_schema = models.CharField(max_length=128, blank=True, null=True)
     source_table = models.CharField(max_length=128, blank=True, null=True)
@@ -60,8 +69,10 @@ class CdcTables(models.Model):
     cntrl_fld = models.CharField(max_length=128, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'cdc_tables'
+        ordering = ['-id']
+        unique_together = (('id', 'table_id'),)
 
 
 # class TestTable(models.Model):

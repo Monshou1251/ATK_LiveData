@@ -1,5 +1,6 @@
 <template>
-    
+  <!-- <button @click="deselectRows">deselect rows</button> -->
+  <div class="buttonsPos">
     <a-popover placement="top">
       <template #content>
         <p>Add new data</p>
@@ -27,380 +28,146 @@
       </template>
       <a-button class="editable-add-btn" style="margin-bottom: 4px" @click="onSubmit"><CheckOutlined style="display: flex"/></a-button>
     </a-popover>
-    <!-- <a-space align="center" style="margin-bottom: 16px">
-    CheckStrictly:
-    <a-switch v-model:checked="rowSelection.checkStrictly"></a-switch>
-    </a-space> -->
-       
-    <a-table
-          size=small
-          bordered
-          rowKey = 'index'
-          :row-selection="rowSelection"
-          :data-source="getAll"
-          :columns="columns"
-          :pagination="{ pageSize: 15 }">
-          
-          <template #bodyCell="{ column, text, record }">
-            <!-- <template v-if="column.dataIndex === 'index'">
-                {{ getAll.findIndex(i => i == (getAll.find(i => i.conn_type === record.conn_type))) + 1 }}
-            </template> -->
-            <template v-if="column.dataIndex == 'target_field_name'">
-              <div class="editable-cell">
-                <div v-if="editableData[record.index]" class="editable-cell-input-wrapper">
-                  <a-input v-model:value="editableData[record.index].target_field_name" @pressEnter="save(record.index)" />
-                  <check-outlined class="editable-cell-icon-check" @click="save(record.index)" />
-                </div>
-                <div v-else class="editable-cell-text-wrapper">
-                  {{ text }}
-                  <edit-outlined class="editable-cell-icon" @click="edit(record.index)" />
-                </div>
-              </div>
-            </template>
-            <template v-if="column.dataIndex == 'conn_type'">
-              <div class="editable-cell">
-                <div v-if="editableData[record.index]" class="editable-cell-input-wrapper">
-                  <a-input v-model:value="editableData[record.index].conn_type" @pressEnter="save(record.index)" />
-                  <check-outlined class="editable-cell-icon-check" @click="save(record.index)" />
-                </div>
-                <div v-else class="editable-cell-text-wrapper">
-                  {{ text }}
-                  <edit-outlined class="editable-cell-icon" @click="edit(record.index)" />
-                </div>
-              </div>
-            </template>
-            <template v-if="column.dataIndex == 'last_read_seq'">
-              <div class="editable-cell">
-                <div v-if="editableData[record.index]" class="editable-cell-input-wrapper">
-                  <a-input v-model:value="editableData[record.index].last_read_seq" @pressEnter="save(record.index)" />
-                  <check-outlined class="editable-cell-icon-check" @click="save(record.index)" />
-                </div>
-                <div v-else class="editable-cell-text-wrapper">
-                  {{ text }}
-                  <edit-outlined class="editable-cell-icon" @click="edit(record.index)" />
-                </div>
-              </div>
-            </template>
-            <template v-if="column.dataIndex == 'conn_name'">
-              <div class="editable-cell">
-                <div v-if="editableData[record.index]" class="editable-cell-input-wrapper">
-                  <a-input v-model:value="editableData[record.index].conn_name" @pressEnter="save(record.index)" />
-                  <check-outlined class="editable-cell-icon-check" @click="save(record.index)" />
-                </div>
-                <div v-else class="editable-cell-text-wrapper">
-                  {{ text }}
-                  <edit-outlined class="editable-cell-icon" @click="edit(record.index)" />
-                </div>
-              </div>
-            </template>
-            <template v-if="column.dataIndex  == 'required'">
-              <div class="editable-cell">
-                <div v-if="editableData[record.index]" class="editable-cell-input-wrapper">
-                  <a-input v-model:value="editableData[record.index].required" @pressEnter="save(record.index)" />
-                  <check-outlined class="editable-cell-icon-check" @click="save(record.index)" />
-                </div>
-                <div v-else class="editable-cell-text-wrapper">
-                  {{ text || ' ' }}
-                  <edit-outlined class="editable-cell-icon" @click="edit(record.index)" />
-                </div>
-              </div>
-            </template>
-            <!-- {{ columns }} -->
-            <template v-if="apiUrlTest  == 'CdcTables/' && column.dataIndex !== 'index'">
-                <div class="editable-cell">
-                  <!-- <li v-for="item in column" :key="item">
-                    {{ item }}
-                  </li>  -->
-                  <div v-if="editableData[record.index]"  class="editable-cell-input-wrapper">
-                    <a-input v-model:value="editableData[record.index][column.dataIndex]" @pressEnter="save(record.index)" />
-                    <check-outlined class="editable-cell-icon-check" @click="save(record.index)" />
-                  </div>
-                  <div v-else class="editable-cell-text-wrapper">
-                    {{ text || ' ' }}
-                      <edit-outlined class="editable-cell-icon" @click="edit(record.index)" />
-                  </div>
-                </div>
-            </template>
-
-            <!-- <template v-if="column.dataIndex === 'name'">
-              <div class="editable-cell">
-                <div v-if="editableData[record.index]" class="editable-cell-input-wrapper">
-                  <a-input v-model:value="editableData[record.id].index" @pressEnter="save(record.index)" />
-                  <check-outlined class="editable-cell-icon-check" @click="save(record.index)" />
-                </div>
-                <div v-else class="editable-cell-text-wrapper">
-                  {{ text || ' ' }}
-                  <edit-outlined class="editable-cell-icon" @click="edit(record.id)" />
-                </div>
-              </div>
-            </template>
-
-            <template v-if="column.dataIndex === 'surname'">
-              <div class="editable-cell">
-                <div v-if="editableData[record.id]" class="editable-cell-input-wrapper">
-                  <a-input v-model:value="editableData[record.id].surname" @pressEnter="save(record.id)" />
-                  <check-outlined class="editable-cell-icon-check" @click="save(record.id)" />
-                </div>
-                <div v-else class="editable-cell-text-wrapper">
-                  {{ text || '' }}
-                  <edit-outlined class="editable-cell-icon" @click="edit(record.id)" />
-                </div>
-              </div>
-            </template> -->
-            <!-- <template v-if="column.dataIndex === 'date'">
-              <div class="editable-cell">
-                <div v-if="editableData[record.id]" class="editable-cell-input-wrapper">
-                  <a-input v-model:value="editableData[record.id].date" @pressEnter="save(record.id)" />
-                  <check-outlined class="editable-cell-icon-check" @click="save(record.id)" />
-                </div>
-                <div v-else class="editable-cell-text-wrapper">
-                  {{ text || ' ' }}
-                  <edit-outlined class="editable-cell-icon" @click="edit(record.id)" />
-                </div>
-              </div>
-            </template> -->
-
-            <template v-else-if="column.dataIndex === 'operation'">
-              <a-popconfirm
-                
-                title="Sure to delete?"
-                @confirm="onDelete(record.id)"
-              >
-                <a>Delete</a>
-              </a-popconfirm>
-            </template>
-          </template>
-        </a-table>    
-</template>
+  </div>
+  <ag-grid-vue
+      style="width: 100%; height: 100%;"
+      class="ag-theme-alpine"
+      :rowHeight = 30
+      :columnDefs="columnDefs"
+      @grid-ready="onGridReady"
+      :defaultColDef="defaultColDef"
+      :rowData="getAll"
+      :enableFillHandle="true"
+      :rowSelection="rowSelection"
+      :enableCellChangeFlash="true"
+      :undoRedoCellEditing="true"
+      :enableRangeSelection="true"
+      :undoRedoCellEditingLimit="10"
+      :columnTypes="columnTypes"
+      @cell-value-changed="onCellValueChanged"
+      @selection-changed="onSelectionChanged"
+      >
+    </ag-grid-vue>
+ </template>
 
 
 
 <script>
 /* eslint-disable */
-import {  defineComponent, onMounted, reactive, watchEffect, ref, unref, toRefs,onUpdated, watch, onRenderTriggered, onBeforeUnmount, onBeforeMount, onBeforeUpdate, computed} from 'vue';
+import {  defineComponent, onServerPrefetch, onMounted, reactive, watchEffect, ref, unref, toRefs,onUpdated, watch, computed} from 'vue';
 import { CheckOutlined, EditOutlined, PlusOutlined, CopyOutlined, DeleteOutlined } from '@ant-design/icons-vue';
 import { cloneDeep } from 'lodash-es';
 import { getAPI } from '@/api/axios'
 import { useStore } from 'vuex'
+import _ from "lodash";
+import { AgGridVue } from "ag-grid-vue3";  // the AG Grid Vue Component
+import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
+import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
+import { autoCompleteProps } from 'ant-design-vue/lib/auto-complete';
+// import * as agGrid from 'ag-grid-community';
+// import 'ag-grid-enterprise';
 /* eslint-enable */
 
 
 export default ({
-  name: 'CdcConn',
+  name: 'LocalData',
   props: {
     apiUrl: {
         type: String,
         required: true
     }
   },
-  // methods:{
-  // 	filter(nationality){
-  //   // We can't find 'Taiwan' in nationalityArr
-  //  return this.nationalityArr.filter(n=>n===nationality).length===0?false:true; // false
-  //  }
-  // },
   components: {
+    AgGridVue,
     CheckOutlined,
     PlusOutlined,
-    EditOutlined,
+    // EditOutlined,
     DeleteOutlined,
-    // CopyOutlined,
+  },
+  methods: {
+
   },
   
   async setup(props) {
-    // console.log('apiUrl is equal to: ' + props.apiUrl)
     const store = useStore()
-    
+    store.dispatch('getData', props.apiUrl)
+    let getAll = ref(null)
+    const gridApi = ref(null)
+    const onGridReady = params => {
+      gridApi.value = params.api
+    }
+    let indexAdd = []
     const disableDeleteButton = computed(() => store.state.localdata.deleteDataAllowed)
     const disableDataAdd = computed(() => store.state.localdata.addDataAllowed)
-    console.log('thats come from LocalDataInit: ' + props.apiUrl)
-    let getAll = ref()
-    let columns = ref()
-    let indexAdd = []
     const apiUrlTest = computed(() => store.state.localdata.apiUrl)
+    let columnDefs = ref()
+    let rowSelection = 'multiple'
    
-    // store.state.localdata.apiUrl, (newUrl, oldUrl) => {
-      // console.log('newUrl', newUrl)
-      // console.log('oldUrl', oldUrl)
-      // store.dispatch('getData', newUrl).then(() =>{
-      //   getAll = computed(() => store.state.localdata.data)
-      //   console.log('store.data: ')
-      //   console.log(store.state.localdata.data)
-      //   console.log(getAll.value)
-
-      //   indexAdd.value = getAll.value.map((item, index) => ({index: ++index, ...item}))
-      //   console.log('indexAdd: ')
-      //   console.log(indexAdd)
-      //   // getAll.value = indexAdd
-      //   getAll.value = indexAdd.value
-      //   let getKeys = Object.keys(indexAdd.value[0])
-      //   console.log('getKeys: ')
-      //   console.log(getKeys)
-
-      //   let columnsHelper = []
-      //   columns = []
-      //   // columns.value.length = 0
-      //   for (const i of getKeys) {
-      //         const ff = {
-      //           title: i,
-      //           dataIndex: i,
-      //           key: i,
-      //         }
-      //         columnsHelper.push(ff)
-      //       }
-      //   columns.value = columnsHelper
+    
+    
+    // DefaultColDef sets props common to all Columns
+    const defaultColDef = {
+      sortable: true,
+      filter: true,
+      flex: 1,
+      resizable: true,
+      editable: true,
       
-      // })
-    // })
+    };
 
-    // watch([getAll, columns], () => console.log(getAll.value, columns) )
+    const columnTypes = {
+      idColumn: { editable: false, maxWidth: 70, resizable: false, headerName: '' },
+      nonEditable: {editable: false},
+    }
 
-    // const getDataFunc = async () => {
-    //   store.dispatch('getData', props.apiUrl)
-    //   console.log(props.apiUrl)
-    //   getAll = computed(() => store.state.localdata.data)
-    // }
-
-    // await getDataFunc()
+    const deselectRows = () => {
+        gridApi.value.deselectAll()
+    }
 
     const validateData = async() => {
       await store.dispatch('getData', props.apiUrl)
       getAll = computed(() => store.state.localdata.data)
-      console.log('store.data: ')
-      console.log(store.state.localdata.data)
-      console.log(getAll.value)
-
       indexAdd = getAll.value.map((item, index) => ({index: ++index, ...item}))
-      console.log('indexAdd: ')
-      console.log(indexAdd)
-      // getAll.value = indexAdd
       store.commit('getDataSuccess', indexAdd)
       let getKeys = Object.keys(indexAdd[0])
-      console.log('getKeys: ')
-      console.log(getKeys)
+      // console.log('getKeys: ')
+      // console.log(getKeys)
 
-      let columnsHelper = []
-      columns.value = []
       // columns.value.length = 0
+      columnDefs.value = []
+      // console.log(columnDefs.value)
       for (const i of getKeys) {
-            const ff = {
-              title: i,
-              dataIndex: i,
-              key: i,
+        if (i !== 'id') {
+          if (i == 'index') {
+              let ff = {
+                field: i,
+                type: 'idColumn',
+                cellStyle: {'background-color': 'rgba(128, 128, 128, 0.060)',
+                  'box-shadow': '1px 0px 0px rgba(128, 128, 128, 0.216)'
+                },
+              }
+              columnDefs.value.push(ff)
+            } else {
+              let ff = {
+              field: i,
+              cellClassRules: {
+                  // apply green to 2008
+                  'rag-red': params => params.value === '[null]',
+              }
             }
-            columnsHelper.push(ff)
+            columnDefs.value.push(ff)
           }
-      const blop = {"width" : "1%"}
-      Object.assign(columnsHelper.find(i => i.title === "index"), blop);
-      columns.value = columnsHelper
-      console.log('columnsHelper:')
-      console.log(columnsHelper)
-      console.log('columns:')
-      console.log(columns)
+        }
+      }
     }
-    watchEffect(() => validateData(getAll))
-    await validateData(getAll)
-    
 
-    // asyncIncrement: () => store.dispatch('asyncIncrement')
-    // watch(() => store.state.localdata.apiUrl, (newUrl, oldUrl) => {
-    //   // console.log('newUrl', newUrl)
-    //   console.log('oldUrl', oldUrl)
-    //   store.dispatch('getData', newUrl)
-    //   .then(() => {store.commit('changeApiUrl', newUrl)
-    //   })
-    //   .then(() => {
-    //     getAll = computed(() => store.state.localdata.data)
-    //     console.log(getAll)
-    //     // let getAllString = JSON.parse(JSON.stringify(getAll.value))
-    //     let getAllString = getAll.value
-    //     let arr = getAllString.map((item, index) => ({index: ++index, ...item}))
 
-    //     getAll = arr
-    //     store.commit('getDataSuccess', getAll)
-    //     const firstGetAllElement = getAll[0]
-    //     let getKeys = Object.keys(firstGetAllElement)
-    //     // columns.splice(0, (columns.length))
-    //     columns.length = 0
-    //     for (const i of getKeys) {
-    //       const ff = {
-    //         title: i,
-    //         dataIndex: i,
-    //         key: i,
-    //       }
-    //       columns.push(ff)
-        
-    //     }
-    //     console.log('this comes COLUMNS from watch:')
-    //     console.log(columns)
-    //     const blop = {"width" : "1%"}
-    //     // Object.assign(insertData.find(item => item.id == key), editableData[key]);
-    //     Object.assign(columns.find(i => i.title === "index"), blop);
-    //     console.log(columns)
-    //   })
-    // })
-
-    // await store.dispatch('getData', props.apiUrl)
-    // .then(() => {store.commit('changeApiUrl', props.apiUrl)})
-    // .then(() => {
-    //   getAll = computed(() => store.state.localdata.data)
-    // })
-    // let kek = reactive(getAll.value.map((item, index) => ({index: ++index, ...item})))
-    //   let firstGetAllElement = kek[0]
-    //   let getKeys = Object.keys(firstGetAllElement)
-    //   for (const i of getKeys) {
-    //     const ff = {
-    //       title: i,
-    //       dataIndex: i,
-    //       key: i,
-    //     }
-    //     columns.push(ff)
-    //     const blop = {"width" : "1%"}
-    //     // Object.assign(insertData.find(item => item.id == key), editableData[key]);
-    //     Object.assign(columns.find(i => i.title === "index"), blop);
-    //   }
-    
-    const editableData = reactive({});
-    const dataSource2 = ref([])
-    let selectedObject = []
-
-    const rowSelection = {
-      onChange: (selectedRowKeys, selectedRows) => {
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-        console.log(selectedRowKeys)
-        // const selectedObject2 = getAll.value
-        selectedObject = getAll.value.filter(d => selectedRowKeys.find(key => key === d.index))
-        console.log(selectedObject)
-      }
-    };
-
-    const edit = index => {
-      store.commit('editDataStart')
-      // console.log(index)
-      // editableData[index] = cloneDeep(getAll.value.filter(item => index === item.index)[0])
-      // console.log(editableData)
-      editableData[index] = cloneDeep(getAll.value.find(item => item.index === index))
-      console.log(editableData[index].table_id)
-    };
-
-    const save = (key) => {
-      const dataToReplace = getAll.value.find(item => item.index == key)
-      console.log(dataToReplace)
-      Object.assign(dataToReplace, editableData[key]);
-      console.log(editableData[key])
-      store.commit('updateData', editableData[key])
-      delete editableData[key];
-    };
-
-    const handleAdd = () => {
-      console.log(columns.value)
-      // console.log(columns.value[0]['title'])
+    const handleAdd = (append) => {
+      const newStore = getAll.value.slice()
       let newData = []
-      for (let i in columns.value) {
-        // console.log(columns.value[i]['title'])
-        newData.push(columns.value[i]['title'])
+      for (let i in columnDefs.value) {
+        newData.push(columnDefs.value[i]['field'])
       }
-      console.log(newData)
       let newDataNull = {}
       for (let z in newData) {
         if (newData[z] == 'index') {
@@ -408,163 +175,165 @@ export default ({
         } else {
           newDataNull[newData[z]] = '[null]'
         }
-        console.log(newData[z])
       }
       console.log(newDataNull)
-      getAll.value.unshift(newDataNull)
-      // Object.assign(getAll, newDataNull)
-      console.log(getAll)
+      if (append) {
+          newStore.unshift(newDataNull);
+          store.commit('editDataSuccess', newStore)
+          store.commit('addData', newDataNull)
+          console.log(store.state.localdata.addedData)
+        } 
+        else {
+          newStore.splice(0, 0, newDataNull);
+        }
+      // validateData()
+      console.log(store.state.localdata.addedData)
+      // getAll = computed(() => store.state.localdata.data)
+    }
+    
+    let dataWithIndex = []
+    let cleanData = []
+    const onCellValueChanged = (event) => {
+      console.log('data after changes is: ', event.data);
+      
+      if (event.data['index']) {
+        console.log('Data contains Index')
+        /* eslint-disable */
+        dataWithIndex.push(event.data)
+        cleanData = dataWithIndex.map(({ index, ...item }) => item);
+        /* eslint-enable */
+        console.log(cleanData)
+        store.commit('updateData', dataWithIndex)
+        console.log(store.state.localdata.updatedData)
+        // dataWithIndex = []
+      } else {
+        console.log('Data has no Index')
+        console.log(event.data)
+      }
+    }
+
+    let dataToDeleteId = []
+    let dataToDeleteInDB = []
+    const onSelectionChanged = () => {
+      const selectedRows = gridApi.value.getSelectedRows();
+      dataToDeleteId = selectedRows.map(function (rowNode) {
+        return rowNode.id;
+      });
+      console.log(dataToDeleteId)
+      // getAll = getAll.value.filter(function (dataItem) {
+      //   return selectedIds.indexOf(dataItem.symbol) < 0;
+      // });
     }
 
     const onDelete = () => {
-      console.log(store.state.localdata.data)
-      const dataToDelete = computed(() => store.state.localdata.dataToDelete)
-      console.log(selectedObject)
-      store.commit('deleteData', selectedObject)
-      console.log(dataToDelete.value)
+      dataToDeleteId.forEach(function(id) {
+        dataToDeleteInDB.push(id)
+      })
+      console.log('data stored for submit ', dataToDeleteInDB)
+      store.commit('deleteData', dataToDeleteId)
     }
 
     const onSubmit = () => {
-      if (store.state.localdata.dataToDelete != null) {
+      if (dataToDeleteInDB.length > 0) {
         console.log('Yeehooo, not zero')
-        const dataToDeleteId = store.state.localdata.dataToDelete.map(i => i.id)
-        console.log(dataToDeleteId)
-        for (const i of dataToDeleteId) {
+        for (let i of dataToDeleteInDB) {
           getAPI.delete(props.apiUrl + i + '/')
           .then(() => {
             console.log('data deleted, id: ' + i)
+            dataToDeleteInDB = []
         })}
+        validateData()
       } else {
         console.log('Dam, something went wrong bud')
       }
-      if (store.state.localdata.addedData.length > 0) {
-        console.log('Hippito Hoppiti women are property')
-        // console.log(store.state.localdata.addedData)
-        const dataToAdd = store.state.localdata.addedData
-        console.log(dataToAdd)
-        for (const y in dataToAdd) {
-          console.log(dataToAdd[y])
-          getAPI.post('CdcConn/', dataToAdd[y])
-          .then(() => {
-            console.log('data added' + y)
-          })
-        }
-      } else {
-        console.log('addedData is empty')
-      }
-      if (store.state.localdata.updatedData.length > 0) {
-        const updatedData = store.state.localdata.updatedData
-        console.log('updatedData is not empty!')
-        console.log(updatedData)
-        // updatedData.forEach(data => {
-        //   console.log(data.key)
-        // })
-        // let cleanData = updatedData.map(data => {
-        //   delete data[0]
-        //   return
-        // })
-        // console.log(cleanData)
-        // updatedData = updatedData.map(({ index, ...object}) => object)
-        // for (var i=0; i < updatedData.length; i++) {
-        //   delete updatedData[i]['index'];
-        // }
-        // const cleanData = updatedData.map(data => {
-        //   return data.slice(1, updatedData.length)
-        // })
-        /* eslint-disable */
-        const cleanData = updatedData.map(({ index, ...item }) => item);
-        console.log(cleanData)
-         /* eslint-enable */
 
-        for (const z of cleanData) {
-        console.log(z)
-        getAPI.put(props.apiUrl, z)
-        .then(() => {
-          console.log('data added' + z)
-        })
+      if (store.state.localdata.updatedData !== null) {
+        if (store.state.localdata.updatedData.length > 0) {
+          const updatedData = store.state.localdata.updatedData
+          for (let i in updatedData) {
+            
+            getAPI.put(props.apiUrl + updatedData[i]['id'] + '/', updatedData[i])
+            .then(() => {
+              store.commit('cleanUpdatedData')
+            })
+          }
+          validateData()
+          
         }
-        store.commit('cleanUpdatedData')
-        console.log(store.state.localdata.updatedData)
-      } else {
-        console.log('updatedData is empty')
       }
+      
+      if (store.state.localdata.addedData !== null) {
+        if (store.state.localdata.addedData.length > 0) {
+          const dataToAdd = store.state.localdata.addedData
+          console.log(dataToAdd)
+          for (const i in dataToAdd) {
+            getAPI.post(props.apiUrl, dataToAdd[i])
+            .then(() => {
+              console.log('data added ', dataToAdd)
+              store.commit('cleanUpdatedData')
+            })
+            store.commit('addData', dataToAdd[i])
+            // console.log(store.state.localdata.addedData)
+          }
+          validateData()
+          store.commit('cleanUpdatedData')
+        }
+      }
+
+      
+
+      validateData()
+      store.commit('cleanUpdatedData')
     }
 
-    // onMounted(() => {
-      // store.dispatch('getData', props.apiUrl).then(() => {
-      //   console.log('data received: ', store.state.localdata.data)
-      //   getAll = store.state.localdata.data
-      // })
-      // store.state.localdata.data
-      // getAll
-      // console.log('that getAll comes from onMounted' + getAll)
-      // console.log('Im mounted')
-      // console.log(props.apiUrl + ' this comes from onMounted LocalData')
-      // })
-    
+    watchEffect(() => validateData())
+    await validateData()
+
     return {
-      // getData: () => store.dispatch('getData', props.apiUrl),
-      rowSelection,
-      columns,
+      columnTypes,
+      onSelectionChanged,
+      onCellValueChanged,
       onDelete,
       handleAdd,
-      dataSource2,
       getAll,
-      editableData,
-      edit,
-      save,
+      apiUrlTest,
+      gridApi,
       onSubmit,
       disableDeleteButton,
       disableDataAdd,
-      getData: () => store.commit('getData', props.apiUrl),
-      indexAdd,
-      apiUrlTest
+      onGridReady,
+      // updateData,
+      columnDefs,
+      defaultColDef,
+      rowSelection,
+      cellWasClicked: (event) => { // Example of consuming Grid Event
+        console.log("cell was clicked", event);
+      },
+      deselectRows,
+      // deselectRows: () =>{
+      //   gridApi.value.deselectAll()
+      // }
     };
   },
 });
 </script>
 <style lang="less">
-.editable-cell {
-  position: relative;
-  .editable-cell-input-wrapper,
-  .editable-cell-text-wrapper {
-    padding-right: 24px;
+  .ag-theme-alpine {
+    /* disable all borders */
+    --ag-borders: solid 1px;
+    /* then add back a border between rows */
+    --ag-borders-row: dashed 1px;
+    --ag-row-border-color: rgba(128, 128, 131, 0.308);
+    --ag-cell-horizontal-border: solid 1px rgba(128, 128, 131, 0.288);
+    --ag-widget-container-horizontal-padding: 1px;
+    --ag-widget-container-vertical-padding: 1px;
+  }
+  .rag-red {
+    color: rgba(128, 128, 128, 0.438);
+  }
+  .index-background {
+    background-color: rgba(128, 128, 128, 0.116);
   }
 
-  .editable-cell-text-wrapper {
-    padding: 5px 24px 5px 5px;
-  }
-
-  .editable-cell-icon,
-  .editable-cell-icon-check {
-    position: absolute;
-    right: 0;
-    width: 20px;
-    cursor: pointer;
-  }
-
-  .editable-cell-icon {
-    margin-top: 4px;
-    display: none;
-  }
-
-  .editable-cell-icon-check {
-    line-height: 28px;
-  }
-
-  .editable-cell-icon:hover,
-  .editable-cell-icon-check:hover {
-    color: #030c13;
-  }
-
-  .editable-add-btn {
-    margin-bottom: 8px;
-  }
-}
-
-.editable-cell:hover .editable-cell-icon {
-  color: #030c13;
-  display: inline-block;
-}
 
 </style>

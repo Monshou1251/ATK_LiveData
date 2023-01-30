@@ -169,6 +169,8 @@ export default {
 }
 
 .grid-item5 {
+  display: flex;
+  flex-direction: column;
   padding: 5px;
   grid-column: 2/3;
   grid-row: 3/4;

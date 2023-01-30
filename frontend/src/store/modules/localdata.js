@@ -7,7 +7,7 @@ const state = {
     dataIsLoaded: false,
     dataToDelete: null,
     addedData: [],
-    updatedData: [],
+    updatedData: null,
     isLoading: false,
     error: null,
     apiUrl: 'CdcConn/',
@@ -73,30 +73,40 @@ const mutations = {
         state.isLoading = false
     },
     deleteData (state, payload) {
-        const result = state.data.filter(x => !payload.some(y => x.index === y.index))
-        state.data = result
-        // const selectedId = payload.map(i => i.id)
-        state.dataToDelete = payload
+        console.log(payload[0])
+        let payId = new Set(payload)
+        let newData = state.data.filter((obj) => obj.id == payId)
+        console.log(newData)
+
+        const newArray = state.data.filter(obj => !payId.has(obj.id));
+        state.data = newArray
     },
     addData (state, payload) {
         // Object.assign(state.data, payload)
-        console.log(payload)
+        // console.log(payload)
         state.addedData.push(payload)
-        state.data.push(payload)
-        console.log(state.addedData)
+        // state.data.unshift(payload)
+        // console.log(state.addedData)
+        // state.addedData = []
     },
     updateData (state, payload) {
-        // const dataToUpdate = state.data.filter(x => !payload.some(y => x.id === y.id))
+        const dataToUpdate = state.data.filter(x => !payload.some(y => x.id === y.id))
+        console.log(dataToUpdate)
+        dataToUpdate.unshift(payload[0])
+        console.log(dataToUpdate)
+        // state.data = dataToUpdate
         console.log(payload)
-        state.updatedData.push(payload)
+        // state.updatedData.push(payload)
+        state.updatedData = payload
         console.log(state.updatedData)
     },
     cleanUpdatedData (state) {
-        state.updatedData.length  = 0
+        state.addedData.length = 0
+        // state.updatedData.length = 0
     },
     changeApiUrl (state, Url) {
         state.apiUrl = Url
-    }
+    },
   
 }
 
