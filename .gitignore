@@ -1,9 +1,9 @@
 .DS_Store
 frontend/node_modules
-backend/app/migrations
+
 /dist
 venv
-app/migrations
+
 frontend/views/DataTable.vue
 frontend/views/DataTableElement.vue
 frontend/views/ETable.vue

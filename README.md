@@ -19,6 +19,16 @@ https://www.python.org/downloads/release/python-3810/
 
 Download and install node.js (it will be required to run vue part of the project):
 
+```
+https://nodejs.org/en/
+```
+
+Make sure to have installed Git on your machine:
+
+```
+https://git-scm.com/download/
+```
+
 Clone the repository:
 
 ```
@@ -59,6 +69,8 @@ Install requirements from requirements.txt:
 ```
 pip install -r requirements.txt
 ```
+
+Make sure
 
 Make migrations:
 
