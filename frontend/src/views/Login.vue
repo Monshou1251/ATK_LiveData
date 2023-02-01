@@ -104,7 +104,7 @@ export default {
           localStorage.setItem('access', access)
           localStorage.setItem('refresh', refresh)
 
-          this.$router.push({name: 'home'})
+          this.$router.push({name: 'globalData'})
         })
         .catch((error) => {
           // console.log('Login.vue, caught error: ' + error)

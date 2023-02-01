@@ -15,7 +15,9 @@
         <sliders-filled /> -->
       </div>
       <div class="grid-item5">
-        <a-button class="editable-add-btn" style="margin-bottom: 4px" @click="handleAdd">Add</a-button>
+        <a-button class="editable-add-btn" style="margin-bottom: 4px" @click="handleAdd"><PlusOutlined style="display: flex"/></a-button>
+        <a-button class="editable-add-btn" style="margin-bottom: 4px" @click="handleAdd"><CopyOutlined style="display: flex"/></a-button>
+        <a-button class="editable-add-btn" style="margin-bottom: 4px" @click="handleAdd"><DeleteOutlined style="display: flex"/></a-button>
         <a-table bordered :data-source="APIData" :columns="columns">
           <template #bodyCell="{ column, text, record }">
             <template v-if="column.dataIndex === 'name'">
@@ -80,8 +82,9 @@
   
 </template>
 <script>
+
 import {  defineComponent, reactive, ref, onMounted } from 'vue';
-import { CheckOutlined, EditOutlined, } from '@ant-design/icons-vue';
+import { CheckOutlined, EditOutlined, PlusOutlined, CopyOutlined, DeleteOutlined } from '@ant-design/icons-vue';
 import { cloneDeep } from 'lodash-es';
 import Navbar2 from '@/components/Navbar2.vue'
 import Sidebar from '@/components/Sidebar.vue'
@@ -93,9 +96,8 @@ export default defineComponent({
     return {
       APIData: null,
       id: '',
-      name: '',
-      surname: '',
-      date: '',
+      conn_type: '',
+      conn_name: '',
     }
   },
   mounted() {
@@ -104,7 +106,7 @@ export default defineComponent({
   methods: {
     async getAll() {
       await getAPI
-        .get('datatable/')
+        .get('CdcConn/')
         .then((response) => {
           this.APIData = response.data
           this.id = ''
@@ -115,7 +117,7 @@ export default defineComponent({
     },
 
     onDelete(key) {
-      getAPI.delete('datatable/' + key)
+      getAPI.delete('CdcConn/' + key)
       .then(() => {
         console.log('data deleted'), this.getAll()
       })
@@ -129,7 +131,7 @@ export default defineComponent({
         date: 'default',
       };
       getAPI
-          .post('datatable/', 
+          .post('CdcConn/', 
             newData
           )
           .then(() => {
@@ -145,38 +147,46 @@ export default defineComponent({
   },
   components: {
     CheckOutlined,
+    PlusOutlined,
     EditOutlined,
+    DeleteOutlined,
+    CopyOutlined,
     Sidebar,
     SearchField,
     Navbar2,
   },
   setup() {
-    const columns = [{
-      title: 'id',
-      dataIndex: 'id',
-      key: 'id',
-      width: '5%',
-    }, {
-      title: 'name',
-      dataIndex: 'name',
-      key: 'name',
+    const columns = [
+    //   {
+    //   title: 'id',
+    //   dataIndex: 'id',
+    //   key: 'id',
+    //   width: '5%',
+    // }, 
+    {
+      title: 'conn_type',
+      dataIndex: 'conn_type',
+      key: 'conn_type',
     },
     {
-      title: 'surname',
-      dataIndex: 'surname',
-      key: 'surname',
-    }, {
-      title: 'date',
-      dataIndex: 'date',
-      key: 'date',
-    }, {
-      title: 'operation',
-      dataIndex: 'operation',
-      key: 'operation',
-    }];
+      title: 'conn_name',
+      dataIndex: 'conn_name',
+      key: 'conn_name',
+    }, 
+    // {
+    //   title: 'date',
+    //   dataIndex: 'date',
+    //   key: 'date',
+    // },
+    //  {
+    //   title: 'operation',
+    //   dataIndex: 'operation',
+    //   key: 'operation',
+    // }
+  ];
 
     const UpdateApi = async () => {
-      getAPI.get('datatable/')
+      getAPI.get('CdcConn/')
     }
 
     onMounted(UpdateApi)
@@ -196,20 +206,20 @@ export default defineComponent({
     const editableData = reactive({});
     const edit = async(key) => {
       console.log('id: ' + key)
-      const dataSource2 = await getAPI.get('datatable/')
+      const dataSource2 = await getAPI.get('CdcConn/')
       const insertData = dataSource2.data    
       console.log(insertData.find(item => item.id == 1))
       editableData[key] = cloneDeep(insertData.find(item => item.id == key));
     };
     const save = async(key) => {
-      const dataSource2 = await getAPI.get('datatable/')
+      const dataSource2 = await getAPI.get('CdcConn/')
       const insertData = dataSource2.data
       console.log(insertData.find(item => item.id == key))
       console.log(editableData[key])
       console.log(key)
       Object.assign(insertData.find(item => item.id == key), editableData[key]);
       console.log(insertData.find(item => item.id == key))
-      await getAPI.put('datatable/' + key + '/', editableData[key]).then(() => {
+      await getAPI.put('CdcConn/' + key + '/', editableData[key]).then(() => {
           console.log('Now, Im updating the data')
           
         })

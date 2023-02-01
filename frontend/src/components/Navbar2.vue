@@ -4,7 +4,7 @@
         <img class="logo" src="@/assets/logo_big_ATK.png" alt="logo" />
     </div>
     <div class="flex-item item-2">
-        <div><router-link class="nav-links" :to="{name: 'home'}" exact>Home</router-link></div>
+        <div><router-link class="nav-links" :to="{name: 'globalData'}" exact>Home</router-link></div>
         <div><router-link class="nav-links" :to="{name: 'datatable'}" exact>Datatable</router-link></div>
         <div><router-link class="nav-links" :to="{name: 'datatableelement'}" exact>DatatableElement</router-link></div>
         <div><router-link :to="{name: 'login'}" exact
