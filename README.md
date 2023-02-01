@@ -17,6 +17,8 @@ Firstly, download and install python (v 3.8.10 recommended):
 https://www.python.org/downloads/release/python-3810/
 ```
 
+Download and install node.js (it will be required to run vue part of the project):
+
 Clone the repository:
 
 ```
