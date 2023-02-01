@@ -98,7 +98,7 @@ WSGI_APPLICATION = 'drestapi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'Livedata',
+        'NAME': 'ATK',
         'USER': 'postgres',
         'PASSWORD': 'A7130cec0b!',
         'HOST': 'localhost',

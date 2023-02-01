@@ -1,8 +1,26 @@
 from rest_framework import serializers
-from . models import DataTable
+from . models import CdcConn, CdcFields, CdcStatus, CdcTables
 
 
-class DataTableSerializer(serializers.ModelSerializer):
+class CdcConnSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DataTable
-        fields = ['id', 'name', 'surname', 'date']
+        model = CdcConn
+        fields = ['conn_type', 'conn_name']
+
+
+class CdcFieldsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CdcFields
+        fields = '__all__'
+
+
+class CdcStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CdcStatus
+        fields = '__all__'
+
+
+class CdcTablesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CdcTables
+        fields = '__all__'

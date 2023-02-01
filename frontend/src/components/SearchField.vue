@@ -1,6 +1,6 @@
 <template>
     <div>
-      <a-input-search v-model:value="value" placeholder="input search loading deault"  />
+      <a-input-search v-model:value="value" placeholder="search..."  />
       <br />
       <!-- <br />
       <a-input-search
