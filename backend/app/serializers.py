@@ -5,7 +5,7 @@ from . models import CdcConn, CdcFields, CdcStatus, CdcTables
 class CdcConnSerializer(serializers.ModelSerializer):
     class Meta:
         model = CdcConn
-        fields = ['conn_type', 'conn_name']
+        fields = '__all__'
 
 
 class CdcFieldsSerializer(serializers.ModelSerializer):
