@@ -101,7 +101,7 @@ DATABASES = {
 Make migrations:
 
 ```
-python manage.py migrate
+python manage.py migrate --fake-initial
 ```
 
 Run django:
