@@ -36,6 +36,7 @@ If you don't have postgresql on your machine, it could be downloaded through the
 https://www.postgresql.org/
 ```
 
+Now it is required to deploy the backend part of the project.
 Clone the repository:
 
 ```
@@ -77,12 +78,6 @@ Install requirements from requirements.txt:
 pip install -r requirements.txt
 ```
 
-Make migrations:
-
-```
-python manage.py migrate
-```
-
 To connect django with the database the settings file should be adjusted.
 Go to
 
@@ -101,6 +96,12 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+```
+
+Make migrations:
+
+```
+python manage.py migrate
 ```
 
 Run django:
