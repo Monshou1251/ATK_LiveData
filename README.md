@@ -29,18 +29,18 @@ Make sure to have installed Git on your machine:
 https://git-scm.com/download/
 ```
 
-For testing purposes create test tables in your postgresql database by using scripts from ATK_LiveData/Test_data/create_tables.sql and imoprt the provided data from csv. files from the same folder.
-If you don't have postgresql on your machine, it could be downloaded through the link below:
-
-```
-https://www.postgresql.org/
-```
-
 Now it is required to deploy the backend part of the project.
 Clone the repository:
 
 ```
 git clone https://github.com/Monshou1251/ATK_LiveData.git
+```
+
+For testing purposes create test tables in your postgresql database by using scripts from ATK_LiveData/Test_data/create_tables.sql and imoprt the provided data from csv. files from the same folder.
+If you don't have postgresql on your machine, it could be downloaded through the link below:
+
+```
+https://www.postgresql.org/
 ```
 
 Go to project directory:
