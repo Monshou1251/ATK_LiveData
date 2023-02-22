@@ -1,6 +1,7 @@
 
 from pathlib import Path
 from datetime import timedelta
+from sqlalchemy import create_engine
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,7 +44,6 @@ SIMPLE_JWT = {
 }
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -97,14 +97,16 @@ WSGI_APPLICATION = 'drestapi.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'PASSWORD': 'A7130cec0b!',
         'HOST': 'localhost',
         'PORT': '5432',
     }
 }
+
+SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:A7130cec0b@localhost/postgres'
 
 
 # Password validation

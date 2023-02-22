@@ -1,99 +1,74 @@
-from django.db import models
+from sqlalchemy import Column, Integer, String, DateTime, Numeric, ForeignKey, UniqueConstraint
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+from django.conf import settings
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
+
+engine = create_engine(settings.SQLALCHEMY_DATABASE_URI)
+Base = declarative_base()
 
 
-class CdcConn(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    conn_type = models.CharField(max_length=128, blank=True, null=True)
-    conn_name = models.CharField(max_length=128)
+class CdcConn(Base):
+    __tablename__ = 'cdc_conn'
+    id = Column(Integer, primary_key=True)
+    conn_type = Column(String(128))
+    conn_name = Column(String(128), nullable=False)
 
-    # def save(self, *args, **kwargs):
-    #     if not self.pk:
-    #         try:
-    #             latest = CdcConn.objects.latest('id')
-    #             self.id = latest.id + 1
-    #         except CdcConn.DoesNotExist:
-    #             pass
-    #     super().save(*args, **kwargs)
-
-    class Meta:
-        managed = True
-        db_table = 'cdc_conn'
-        ordering = ['-id']
-        unique_together = (('conn_name', 'id'),)
+    __table_args__ = (
+        UniqueConstraint('conn_name', 'id', name='_conn_name_id_uc'),
+    )
 
 
-class CdcFields(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    table_id = models.CharField(max_length=128)
-    source_field_name = models.CharField(max_length=128)
-    target_field_name = models.CharField(max_length=128, blank=True, null=True)
-    field_index = models.DecimalField(max_digits=6, decimal_places=0, blank=True, null=True)
-    field_type = models.CharField(max_length=40, blank=True, null=True)
-    modified_time = models.DateTimeField(blank=True, null=True)
-    pk_field = models.DecimalField(db_column='pk', max_digits=10, decimal_places=0, blank=True, null=True)
-    required = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True)
+class CdcFields(Base):
+    __tablename__ = 'cdc_fields'
+    id = Column(Integer, primary_key=True)
+    table_id = Column(String(128), nullable=False)
+    source_field_name = Column(String(128), nullable=False)
+    target_field_name = Column(String(128))
+    field_index = Column(Numeric(6, 0))
+    field_type = Column(String(40))
+    modified_time = Column(DateTime)
+    pk_field = Column(Numeric(10, 0))
+    required = Column(Numeric(10, 0))
 
-    # def save(self, *args, **kwargs):
-    #     if not self.pk:
-    #         try:
-    #             latest = CdcFields.objects.latest('id')
-    #             self.id = latest.id + 1
-    #         except CdcFields.DoesNotExist:
-    #             pass
-    #     super().save(*args, **kwargs)
-
-    class Meta:
-        managed = True
-        db_table = 'cdc_fields'
-        unique_together = (('table_id', 'source_field_name', 'id'),)
-        ordering = ['-id']
+    __table_args__ = (
+        UniqueConstraint('table_id', 'source_field_name', 'id',
+                         name='_table_id_source_field_name_id_uc'),
+    )
 
 
-class CdcStatus(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    table_id = models.CharField(max_length=128)
-    last_read_seq = models.CharField(max_length=35, blank=True, null=True)
-    init_read_seq = models.CharField(max_length=35, blank=True, null=True)
+class CdcStatus(Base):
+    __tablename__ = 'cdc_status'
+    id = Column(Integer, primary_key=True)
+    table_id = Column(String(128), nullable=False)
+    last_read_seq = Column(String(35))
+    init_read_seq = Column(String(35))
 
-    # def save(self, *args, **kwargs):
-    #     if not self.pk:
-    #         try:
-    #             latest = CdcStatus.objects.latest('id')
-    #             self.id = latest.id + 1
-    #         except CdcStatus.DoesNotExist:
-    #             pass
-    #     super().save(*args, **kwargs)
-
-    class Meta:
-        managed = True
-        db_table = 'cdc_status'
-        unique_together = (('table_id', 'id'),)
-        ordering = ['-id']
+    __table_args__ = (
+        UniqueConstraint('table_id', 'id', name='_table_id_id_uc'),
+    )
 
 
-class CdcTables(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    table_id = models.CharField(max_length=128)
-    source_db = models.CharField(max_length=128, blank=True, null=True)
-    source_schema = models.CharField(max_length=128, blank=True, null=True)
-    source_table = models.CharField(max_length=128, blank=True, null=True)
-    target_schema = models.CharField(max_length=128, blank=True, null=True)
-    target_table = models.CharField(max_length=128, blank=True, null=True)
-    uppercase_fields = models.DecimalField(max_digits=18, decimal_places=0, blank=True, null=True)
-    filter = models.CharField(max_length=128, blank=True, null=True)
-    force_init = models.CharField(max_length=128, blank=True, null=True)
-    cntrl_fld = models.CharField(max_length=128, blank=True, null=True)
+class CdcTables(Base):
+    __tablename__ = 'cdc_tables'
+    id = Column(Integer, primary_key=True)
+    table_id = Column(String(128), nullable=False)
+    source_db = Column(String(128))
+    source_schema = Column(String(128))
+    source_table = Column(String(128))
+    target_schema = Column(String(128))
+    target_table = Column(String(128))
+    uppercase_fields = Column(Numeric(18, 0))
+    filter = Column(String(128))
+    force_init = Column(String(128))
+    cntrl_fld = Column(String(128))
 
-    # def save(self, *args, **kwargs):
-    #     if not self.pk:
-    #         try:
-    #             latest = CdcTables.objects.latest('id')
-    #             self.id = latest.id + 1
-    #         except CdcTables.DoesNotExist:
-    #             pass
-    #     super().save(*args, **kwargs)
+    cdc_fields = relationship('CdcFields', backref='cdc_table')
 
-    class Meta:
-        managed = True
-        db_table = 'cdc_tables'
-        ordering = ['-id']
+    __table_args__ = (
+        UniqueConstraint('table_id', 'id', name='_table_id_id_uc'),
+    )
+
+
+Session = sessionmaker(bind=engine)

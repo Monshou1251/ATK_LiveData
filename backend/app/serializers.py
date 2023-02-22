@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from . models import CdcConn, CdcFields, CdcStatus, CdcTables
+from .models import CdcConn, CdcFields, CdcStatus, CdcTables
 
 
 class CdcConnSerializer(serializers.ModelSerializer):
