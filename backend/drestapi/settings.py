@@ -1,7 +1,7 @@
 
 from pathlib import Path
 from datetime import timedelta
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, MetaData
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -44,6 +44,7 @@ SIMPLE_JWT = {
 }
 
 INSTALLED_APPS = [
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -56,6 +57,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'djoser',
     'app',
+    'aldjemy',
 ]
 
 
@@ -106,7 +108,9 @@ DATABASES = {
     }
 }
 
-SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:A7130cec0b@localhost/postgres'
+SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:A7130cec0b!@localhost/postgres'
+engine = create_engine(SQLALCHEMY_DATABASE_URI)
+# metadata = MetaData(bind=engine)
 
 
 # Password validation

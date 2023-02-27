@@ -5,9 +5,9 @@ from .views import CdcConnViewSet, CdcFieldsViewSet, CdcStatusViewSet, CdcTables
 
 
 router = routers.DefaultRouter()
-router.register('CdcConn', CdcConnViewSet)
-router.register('CdcFields', CdcFieldsViewSet)
-router.register('CdcStatus', CdcStatusViewSet)
-router.register('CdcTables', CdcTablesViewSet)
+router.register('CdcConn', CdcConnViewSet, basename='cdc_conn')
+router.register('CdcFields', CdcFieldsViewSet, basename='cdc_fields')
+router.register('CdcStatus', CdcStatusViewSet, basename='cdc_status')
+router.register('CdcTables', CdcTablesViewSet, basename='cdc_tables')
 
 urlpatterns = router.urls
